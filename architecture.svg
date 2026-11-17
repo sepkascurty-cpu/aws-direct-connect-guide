@@ -1,0 +1,233 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1150" viewBox="0 0 1200 1150" font-family="Arial, Helvetica, sans-serif">
+  <rect width="1200" height="1150" fill="#ffffff"/>
+
+  <!-- Title -->
+  <text x="600" y="34" font-size="22" font-weight="bold" fill="#232F3E" text-anchor="middle">AWS Direct Connect — Hybrid Connectivity Architecture</text>
+  <text x="600" y="58" font-size="13" fill="#666666" text-anchor="middle">On-Premises Router &#8594; Direct Connect Location &#8594; Transit VIF &#8594; Direct Connect Gateway &#8594; VPC &#8594; EC2 / RDS</text>
+
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <polygon points="0 0, 8 4, 0 8" fill="#232F3E"/>
+    </marker>
+    <marker id="arrowOrange" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <polygon points="0 0, 8 4, 0 8" fill="#FF9900"/>
+    </marker>
+    <marker id="arrowGreen" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <polygon points="0 0, 8 4, 0 8" fill="#1E8900"/>
+    </marker>
+    <marker id="arrowPurple" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <polygon points="0 0, 8 4, 0 8" fill="#7A5AC8"/>
+    </marker>
+    <marker id="arrowBlue" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <polygon points="0 0, 8 4, 0 8" fill="#527FFF"/>
+    </marker>
+  </defs>
+
+  <!-- ================= On-Premises Data Center ================= -->
+  <rect x="30" y="110" width="250" height="420" fill="#F2F3F3" stroke="#232F3E" stroke-width="1.5"/>
+  <text x="155" y="136" font-size="15" font-weight="bold" fill="#232F3E" text-anchor="middle">On-Premises</text>
+  <text x="155" y="156" font-size="15" font-weight="bold" fill="#232F3E" text-anchor="middle">Data Center</text>
+
+  <!-- On-prem router -->
+  <g>
+    <rect x="85" y="180" width="140" height="56" rx="4" fill="#7A5AC8"/>
+    <text x="155" y="204" font-size="13" font-weight="bold" fill="#ffffff" text-anchor="middle">Customer Router</text>
+    <text x="155" y="222" font-size="11" fill="#ffffff" text-anchor="middle">BGP &#183; ASN 65001 &#183; BFD</text>
+    <text x="155" y="252" font-size="11" fill="#232F3E" text-anchor="middle">Customer Router</text>
+    <text x="155" y="267" font-size="11" font-style="italic" fill="#555" text-anchor="middle">Advertises 10.0.0.0/8</text>
+  </g>
+
+  <!-- On-prem servers -->
+  <g>
+    <rect x="85" y="300" width="140" height="56" rx="4" fill="#FF9900"/>
+    <text x="155" y="324" font-size="13" font-weight="bold" fill="#ffffff" text-anchor="middle">App Servers</text>
+    <text x="155" y="342" font-size="11" fill="#ffffff" text-anchor="middle">ERP &#183; File shares</text>
+    <text x="155" y="372" font-size="11" fill="#232F3E" text-anchor="middle">On-prem workloads</text>
+    <text x="155" y="387" font-size="11" font-style="italic" fill="#555" text-anchor="middle">Stays on-prem, talks to AWS</text>
+  </g>
+
+  <!-- Second router (redundant) -->
+  <g>
+    <rect x="85" y="420" width="140" height="56" rx="4" fill="#7A5AC8"/>
+    <text x="155" y="444" font-size="13" font-weight="bold" fill="#ffffff" text-anchor="middle">Backup Router</text>
+    <text x="155" y="462" font-size="11" fill="#ffffff" text-anchor="middle">2nd DX location &#183; BGP</text>
+    <text x="155" y="492" font-size="11" fill="#232F3E" text-anchor="middle">Redundant path</text>
+    <text x="155" y="507" font-size="11" font-style="italic" fill="#555" text-anchor="middle">For the 99.99% SLA</text>
+  </g>
+
+  <!-- ================= Direct Connect Location ================= -->
+  <rect x="330" y="110" width="230" height="420" fill="none" stroke="#7A5AC8" stroke-width="2" stroke-dasharray="8 5"/>
+  <text x="445" y="136" font-size="15" font-weight="bold" fill="#7A5AC8" text-anchor="middle">Direct Connect</text>
+  <text x="445" y="156" font-size="15" font-weight="bold" fill="#7A5AC8" text-anchor="middle">Location</text>
+
+  <g>
+    <rect x="365" y="180" width="160" height="56" rx="4" fill="#7A5AC8"/>
+    <text x="445" y="204" font-size="13" font-weight="bold" fill="#ffffff" text-anchor="middle">DX Connection</text>
+    <text x="445" y="222" font-size="11" fill="#ffffff" text-anchor="middle">Dedicated 10 Gbps</text>
+    <text x="445" y="252" font-size="11" fill="#232F3E" text-anchor="middle">Direct Connect</text>
+    <text x="445" y="267" font-size="11" font-style="italic" fill="#555" text-anchor="middle">Physical port + cross-connect</text>
+  </g>
+
+  <g>
+    <rect x="365" y="300" width="160" height="56" rx="4" fill="#7A5AC8"/>
+    <text x="445" y="324" font-size="13" font-weight="bold" fill="#ffffff" text-anchor="middle">LAG (optional)</text>
+    <text x="445" y="342" font-size="11" fill="#ffffff" text-anchor="middle">Up to 4 connections</text>
+    <text x="445" y="372" font-size="11" fill="#232F3E" text-anchor="middle">Link Aggregation Group</text>
+    <text x="445" y="387" font-size="11" font-style="italic" fill="#555" text-anchor="middle">One logical 40 Gbps pipe</text>
+  </g>
+
+  <g>
+    <rect x="365" y="420" width="160" height="56" rx="4" fill="#7A5AC8"/>
+    <text x="445" y="444" font-size="13" font-weight="bold" fill="#ffffff" text-anchor="middle">MACsec</text>
+    <text x="445" y="462" font-size="11" fill="#ffffff" text-anchor="middle">Line-rate encryption</text>
+    <text x="445" y="492" font-size="11" fill="#232F3E" text-anchor="middle">MACsec / VPN over DX</text>
+    <text x="445" y="507" font-size="11" font-style="italic" fill="#555" text-anchor="middle">DX alone is private, not encrypted</text>
+  </g>
+
+  <!-- Arrow: on-prem router -> DX location -->
+  <line x1="280" y1="208" x2="362" y2="208" stroke="#232F3E" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="321" y="196" font-size="11" font-weight="bold" fill="#232F3E" text-anchor="middle">Cross-connect</text>
+  <text x="321" y="232" font-size="11" fill="#555" text-anchor="middle">Single-mode fibre</text>
+
+  <!-- Arrow: backup router -> DX location (second location) -->
+  <line x1="280" y1="448" x2="362" y2="448" stroke="#7A5AC8" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#arrowPurple)"/>
+  <text x="321" y="436" font-size="11" font-weight="bold" fill="#7A5AC8" text-anchor="middle">2nd location</text>
+
+  <!-- ================= AWS Cloud ================= -->
+  <rect x="610" y="90" width="560" height="960" fill="none" stroke="#232F3E" stroke-width="2"/>
+  <text x="630" y="116" font-size="16" font-weight="bold" fill="#232F3E">AWS Cloud — ap-southeast-1</text>
+
+  <!-- Direct Connect Gateway -->
+  <g>
+    <rect x="700" y="140" width="200" height="60" rx="4" fill="#7A5AC8"/>
+    <text x="800" y="165" font-size="13" font-weight="bold" fill="#ffffff" text-anchor="middle">Direct Connect Gateway</text>
+    <text x="800" y="183" font-size="11" fill="#ffffff" text-anchor="middle">Hub for many VPCs / regions</text>
+    <text x="800" y="216" font-size="11" fill="#232F3E" text-anchor="middle">Direct Connect Gateway</text>
+    <text x="800" y="231" font-size="11" font-style="italic" fill="#555" text-anchor="middle">Transit VIF terminates here</text>
+  </g>
+
+  <!-- Arrow: DX location -> DX Gateway -->
+  <line x1="560" y1="208" x2="697" y2="180" stroke="#7A5AC8" stroke-width="2" marker-end="url(#arrowPurple)"/>
+  <text x="628" y="168" font-size="11" font-weight="bold" fill="#7A5AC8" text-anchor="middle">Transit VIF</text>
+  <text x="628" y="182" font-size="11" fill="#7A5AC8" text-anchor="middle">BGP + BFD</text>
+
+  <!-- S3 via Public VIF -->
+  <g>
+    <rect x="960" y="140" width="170" height="60" rx="4" fill="#1E8900"/>
+    <text x="1045" y="165" font-size="13" font-weight="bold" fill="#ffffff" text-anchor="middle">Amazon S3</text>
+    <text x="1045" y="183" font-size="11" fill="#ffffff" text-anchor="middle">Object storage</text>
+    <text x="1045" y="216" font-size="11" fill="#232F3E" text-anchor="middle">Amazon S3</text>
+    <text x="1045" y="231" font-size="11" font-style="italic" fill="#555" text-anchor="middle">Reached via Public VIF</text>
+  </g>
+  <line x1="560" y1="328" x2="957" y2="180" stroke="#1E8900" stroke-width="2" marker-end="url(#arrowGreen)"/>
+  <text x="760" y="300" font-size="11" font-weight="bold" fill="#1E8900" text-anchor="middle">Public VIF — AWS public services</text>
+
+  <!-- ================= VPC ================= -->
+  <rect x="640" y="260" width="500" height="760" fill="none" stroke="#1E8900" stroke-width="2"/>
+  <text x="660" y="286" font-size="14" font-weight="bold" fill="#1E8900">VPC  172.31.0.0/16</text>
+
+  <!-- AZ 1 -->
+  <rect x="660" y="300" width="230" height="700" fill="none" stroke="#527FFF" stroke-width="1.5" stroke-dasharray="8 5"/>
+  <text x="775" y="324" font-size="13" font-weight="bold" fill="#527FFF" text-anchor="middle">Availability Zone 1</text>
+
+  <!-- AZ 2 -->
+  <rect x="910" y="300" width="230" height="700" fill="none" stroke="#527FFF" stroke-width="1.5" stroke-dasharray="8 5"/>
+  <text x="1025" y="324" font-size="13" font-weight="bold" fill="#527FFF" text-anchor="middle">Availability Zone 2</text>
+
+  <!-- VGW AZ1 -->
+  <g>
+    <rect x="690" y="340" width="170" height="52" rx="4" fill="#7A5AC8"/>
+    <text x="775" y="362" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle">Virtual Private Gateway</text>
+    <text x="775" y="379" font-size="11" fill="#ffffff" text-anchor="middle">VGW — VPC attachment</text>
+  </g>
+  <!-- VGW AZ2 -->
+  <g>
+    <rect x="940" y="340" width="170" height="52" rx="4" fill="#7A5AC8"/>
+    <text x="1025" y="362" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle">Virtual Private Gateway</text>
+    <text x="1025" y="379" font-size="11" fill="#ffffff" text-anchor="middle">VGW — VPC attachment</text>
+  </g>
+
+  <!-- Arrows: DX Gateway -> VGWs -->
+  <line x1="760" y1="200" x2="760" y2="337" stroke="#7A5AC8" stroke-width="2" marker-end="url(#arrowPurple)"/>
+  <line x1="840" y1="200" x2="1030" y2="337" stroke="#7A5AC8" stroke-width="2" marker-end="url(#arrowPurple)"/>
+  <text x="900" y="255" font-size="11" font-weight="bold" fill="#7A5AC8" text-anchor="middle">DX Gateway association</text>
+
+  <!-- App subnet AZ1 -->
+  <rect x="680" y="420" width="190" height="180" fill="#EAF2FF" stroke="#527FFF" stroke-width="1"/>
+  <text x="775" y="442" font-size="12" font-weight="bold" fill="#527FFF" text-anchor="middle">App Subnet (private)</text>
+  <g>
+    <rect x="705" y="455" width="140" height="52" rx="4" fill="#FF9900"/>
+    <text x="775" y="477" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle">EC2 Instances</text>
+    <text x="775" y="494" font-size="11" fill="#ffffff" text-anchor="middle">App servers</text>
+  </g>
+  <text x="775" y="532" font-size="11" fill="#232F3E" text-anchor="middle">EC2 — App tier</text>
+  <text x="775" y="547" font-size="11" font-style="italic" fill="#555" text-anchor="middle">Private subnet, no public IP</text>
+  <text x="775" y="580" font-size="11" fill="#555" text-anchor="middle">Route: 10.0.0.0/8 &#8594; VGW</text>
+
+  <!-- App subnet AZ2 -->
+  <rect x="930" y="420" width="190" height="180" fill="#EAF2FF" stroke="#527FFF" stroke-width="1"/>
+  <text x="1025" y="442" font-size="12" font-weight="bold" fill="#527FFF" text-anchor="middle">App Subnet (private)</text>
+  <g>
+    <rect x="955" y="455" width="140" height="52" rx="4" fill="#FF9900"/>
+    <text x="1025" y="477" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle">EC2 Instances</text>
+    <text x="1025" y="494" font-size="11" fill="#ffffff" text-anchor="middle">App servers</text>
+  </g>
+  <text x="1025" y="532" font-size="11" fill="#232F3E" text-anchor="middle">EC2 — App tier</text>
+  <text x="1025" y="547" font-size="11" font-style="italic" fill="#555" text-anchor="middle">Private subnet, no public IP</text>
+  <text x="1025" y="580" font-size="11" fill="#555" text-anchor="middle">Route: 10.0.0.0/8 &#8594; VGW</text>
+
+  <!-- Arrows: VGW -> App tier -->
+  <line x1="775" y1="392" x2="775" y2="452" stroke="#FF9900" stroke-width="2" marker-end="url(#arrowOrange)"/>
+  <line x1="1025" y1="392" x2="1025" y2="452" stroke="#FF9900" stroke-width="2" marker-end="url(#arrowOrange)"/>
+
+  <!-- DB subnet AZ1 -->
+  <rect x="680" y="640" width="190" height="180" fill="#EAF2FF" stroke="#527FFF" stroke-width="1"/>
+  <text x="775" y="662" font-size="12" font-weight="bold" fill="#527FFF" text-anchor="middle">DB Subnet (private)</text>
+  <g>
+    <rect x="705" y="675" width="140" height="52" rx="4" fill="#527FFF"/>
+    <text x="775" y="697" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle">Amazon RDS</text>
+    <text x="775" y="714" font-size="11" fill="#ffffff" text-anchor="middle">PostgreSQL (primary)</text>
+  </g>
+  <text x="775" y="752" font-size="11" fill="#232F3E" text-anchor="middle">Amazon RDS</text>
+  <text x="775" y="767" font-size="11" font-style="italic" fill="#555" text-anchor="middle">Database (primary)</text>
+  <text x="775" y="800" font-size="11" fill="#555" text-anchor="middle">Multi-AZ standby in AZ 2</text>
+
+  <!-- DB subnet AZ2 -->
+  <rect x="930" y="640" width="190" height="180" fill="#EAF2FF" stroke="#527FFF" stroke-width="1"/>
+  <text x="1025" y="662" font-size="12" font-weight="bold" fill="#527FFF" text-anchor="middle">DB Subnet (private)</text>
+  <g>
+    <rect x="955" y="675" width="140" height="52" rx="4" fill="#527FFF"/>
+    <text x="1025" y="697" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle">Amazon RDS</text>
+    <text x="1025" y="714" font-size="11" fill="#ffffff" text-anchor="middle">PostgreSQL (standby)</text>
+  </g>
+  <text x="1025" y="752" font-size="11" fill="#232F3E" text-anchor="middle">Amazon RDS</text>
+  <text x="1025" y="767" font-size="11" font-style="italic" fill="#555" text-anchor="middle">Database (standby)</text>
+  <text x="1025" y="800" font-size="11" fill="#555" text-anchor="middle">Sync replication from AZ 1</text>
+
+  <!-- Arrows: App tier -> DB -->
+  <line x1="775" y1="600" x2="775" y2="672" stroke="#527FFF" stroke-width="2" marker-end="url(#arrowBlue)"/>
+  <line x1="1025" y1="600" x2="1025" y2="672" stroke="#527FFF" stroke-width="2" marker-end="url(#arrowBlue)"/>
+  <!-- Replication arrow between RDS instances -->
+  <line x1="870" y1="701" x2="952" y2="701" stroke="#527FFF" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#arrowBlue)"/>
+  <text x="911" y="690" font-size="11" fill="#527FFF" text-anchor="middle">sync</text>
+
+  <!-- ElastiCache / monitoring strip at bottom of VPC -->
+  <g>
+    <rect x="700" y="860" width="180" height="52" rx="4" fill="#527FFF"/>
+    <text x="790" y="882" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle">ElastiCache</text>
+    <text x="790" y="899" font-size="11" fill="#ffffff" text-anchor="middle">Redis — session cache</text>
+  </g>
+  <g>
+    <rect x="920" y="860" width="180" height="52" rx="4" fill="#FF9900"/>
+    <text x="1010" y="882" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle">CloudWatch</text>
+    <text x="1010" y="899" font-size="11" fill="#ffffff" text-anchor="middle">DX metrics + alarms</text>
+  </g>
+  <text x="790" y="938" font-size="11" fill="#232F3E" text-anchor="middle">Amazon ElastiCache</text>
+  <text x="790" y="953" font-size="11" font-style="italic" fill="#555" text-anchor="middle">Caching service</text>
+  <text x="1010" y="938" font-size="11" fill="#232F3E" text-anchor="middle">Amazon CloudWatch</text>
+  <text x="1010" y="953" font-size="11" font-style="italic" fill="#555" text-anchor="middle">ConnectionState, BGP alarms</text>
+
+  <!-- Footer note -->
+  <text x="600" y="1090" font-size="12" fill="#555555" text-anchor="middle">Redundancy: a second Direct Connect connection at a different DX location (left, dashed) gives the 99.99% SLA.</text>
+  <text x="600" y="1112" font-size="12" fill="#555555" text-anchor="middle">BGP advertises the same prefixes on both paths; BFD detects a dead path in under a second.</text>
+</svg>
