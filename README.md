@@ -17,6 +17,10 @@
 
 ---
 
+## 🌍 In plain words — what is this, really?
+
+Imagine your office sends trucks to a big distribution centre every day, but the public highway is sometimes jammed, sometimes slow, and anyone can see your trucks on it. Direct Connect is like leasing your own private toll road between your office and that centre: the route is fixed, the travel time is predictable, and your traffic does not mix with the public internet at all. Your office is your on-premises data centre, the distribution centre is AWS, and the private road is a dedicated network cable plugged in at a Direct Connect location. Once the road exists, you still need signposts telling traffic which exit leads to which building — that is BGP exchanging routes, and the virtual interfaces (VIFs) are the individual exits to your VPCs or to AWS public services. Companies pay for this road when they move huge amounts of data, need steady low latency, or want a more private and reliable link than a VPN over the public highway. The catch mirrors the analogy too: a private road takes time and money to build, and you still need a backup route in case it closes.
+
 ## 🧩 The Pieces, in One Picture
 
 | Piece | What it does | Think of it as |
@@ -133,12 +137,6 @@ Or run the Python demo — [`direct_connect_demo.py`](direct_connect_demo.py) �
 - **Assuming DX encrypts traffic** — it doesn't. The fibre is private, not encrypted. Add MACsec (on supported dedicated connections) or run a VPN over the VIF for sensitive data.
 - **One DX location = one point of failure** — two connections in the same facility share the same fate. 99.99% needs two *locations*.
 - **Forgetting the letter of authorisation** — a hosted connection needs a LOA-CFA from AWS before your partner can provision the cross-connect. Budget days for paperwork, not just hours for the CLI.
-
----
-
-## 📝 Quiz
-
-Think you know it? Five questions in [`quiz.md`](quiz.md) — including the classic "my failover never failed over" puzzle.
 
 ---
 
